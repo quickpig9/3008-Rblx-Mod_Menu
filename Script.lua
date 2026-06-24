@@ -7,7 +7,7 @@ local Workspace = game:GetService("Workspace")
 local localPlayer = Players.LocalPlayer
 local playerGui = localPlayer:WaitForChild("PlayerGui")
 
--- 1. Główny kontener (Czyszczenie starego)
+-- 1. Main Container (Cleaning old GUI)
 local oldGui = playerGui:FindFirstChild("Mod Menu")
 if oldGui then oldGui:Destroy() end
 
@@ -17,7 +17,7 @@ screenGui.ResetOnSpawn = false
 screenGui.DisplayOrder = 9999999
 screenGui.Parent = playerGui
 
--- 2. Główna ramka menu
+-- 2. Main Frame
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(0, 450, 0, 380)
@@ -33,7 +33,7 @@ local frameCorner = Instance.new("UICorner")
 frameCorner.CornerRadius = UDim.new(0, 10)
 frameCorner.Parent = mainFrame
 
--- TopBar (Góra menu)
+-- TopBar
 local topBar = Instance.new("Frame")
 topBar.Name = "TopBar"
 topBar.Size = UDim2.new(1, 0, 0, 40)
@@ -59,7 +59,7 @@ titleLabel.Name = "Title"
 titleLabel.Size = UDim2.new(1, -90, 1, 0)
 titleLabel.Position = UDim2.new(0, 15, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "3008 Mod Menu v1.4.0"
+titleLabel.Text = "3008 Mod Menu v1.5.1"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 16
 titleLabel.Font = Enum.Font.GothamBold
@@ -67,7 +67,7 @@ titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.ZIndex = 12
 titleLabel.Parent = topBar
 
--- Panel Zakładek (Lewa strona)
+-- Tabs Panel (Left Side)
 local tabsPanel = Instance.new("Frame")
 tabsPanel.Name = "TabsPanel"
 tabsPanel.Size = UDim2.new(0, 120, 1, -40)
@@ -87,7 +87,7 @@ local tabsPadding = Instance.new("UIPadding")
 tabsPadding.PaddingTop = UDim.new(0, 10)
 tabsPadding.Parent = tabsPanel
 
--- Kontener na strony (Prawa strona)
+-- Pages Container (Right Side)
 local pagesContainer = Instance.new("Frame")
 pagesContainer.Name = "PagesContainer"
 pagesContainer.Size = UDim2.new(1, -130, 1, -50)
@@ -156,18 +156,18 @@ local function createTab(name, layoutOrder)
 	return scrollFrame
 end
 
--- GENEROWANIE ZAKŁADEK (Dodana zakładka What's New na samej górze lub dole, dałem jako 4)
-local pageMain = createTab("Główne", 1)
-local pageVisuals = createTab("Wizualne", 2)
-local pageOther = createTab("Inne", 3)
+-- GENERATING TABS
+local pageMain = createTab("Main", 1)
+local pageVisuals = createTab("Visuals", 2)
+local pageOther = createTab("Other", 3)
 local pageWhatsNew = createTab("What's new", 4)
 
--- Włączenie domyślnej zakładki
-tabs["Główne"].BackgroundColor3 = activeTabColor
-tabs["Główne"].TextColor3 = Color3.fromRGB(255, 255, 255)
-pages["Główne"].Visible = true
+-- Enable Default Tab
+tabs["Main"].BackgroundColor3 = activeTabColor
+tabs["Main"].TextColor3 = Color3.fromRGB(255, 255, 255)
+pages["Main"].Visible = true
 
--- Funkcja pomocnicza do tworzenia przycisków
+-- Helper function to create buttons
 local function createMenuButton(name, text, layoutOrder, parentPage, callback)
 	local button = Instance.new("TextButton")
 	button.Name = name
@@ -190,7 +190,7 @@ local function createMenuButton(name, text, layoutOrder, parentPage, callback)
 	return button
 end
 
--- Bezpieczne szukanie oryginalnego zegara czasu gry
+-- Safely finding the game clock
 local function findCorrectTextBox()
 	local found = nil
 	pcall(function()
@@ -208,7 +208,7 @@ local function findCorrectTextBox()
 end
 
 -- ====================================================================
--- KOD ZAKŁADKI: WHAT'S NEW (Nowości w wersjach)
+-- TAB CODE: WHAT'S NEW
 -- ====================================================================
 local function addLogLabel(text, font, size, color, order)
 	local lbl = Instance.new("TextLabel")
@@ -224,32 +224,34 @@ local function addLogLabel(text, font, size, color, order)
 	lbl.Parent = pageWhatsNew
 end
 
--- Nagłówek Wersji 1.1.0
-addLogLabel(" WERSJA 1.1.0 (Nowości)", Enum.Font.GothamBold, 14, Color3.fromRGB(0, 150, 255), 1)
-addLogLabel("• Dodano funkcję: Speed & Jump Power Sliders", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 2)
-addLogLabel("• Dodano funkcję: FullBright (Światło w głowie)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 3)
-addLogLabel("• Dodano funkcję: Infinite Admin (Yield)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 4)
-addLogLabel("• Dodano funkcję: Trans Walk (Kolizje transparentne)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 5)
-addLogLabel("• Dodano funkcję: ESP (Wizualne podświetlanie graczy/NPC)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 6)
-addLogLabel("• Dodano system: CloseButton (X) oraz MinimizeButton (-)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 7)
+-- Version 1.1.0 Features
+addLogLabel(" VERSION 1.1.0 (Features)", Enum.Font.GothamBold, 14, Color3.fromRGB(0, 150, 255), 1)
+addLogLabel("• Added feature: Speed & Jump Power Sliders", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 2)
+addLogLabel("• Added feature: FullBright (Headlight)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 3)
+addLogLabel("• Added feature: Infinite Admin (Yield)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 4)
+addLogLabel("• Added feature: Trans Walk (Pass through transparent objects)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 5)
+addLogLabel("• Added feature: ESP (Highlight Players/NPCs)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 6)
+addLogLabel("• Added system: CloseButton (X) & MinimizeButton (-)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 7)
 
--- Odstęp
+-- Spacing
 addLogLabel("", Enum.Font.Gotham, 10, Color3.fromRGB(255,255,255), 8)
 
--- Kolejne poprawki w patchach
-addLogLabel(" AKTUALNE POPRAWKI (v1.3.2/v1.4.0)", Enum.Font.GothamBold, 13, Color3.fromRGB(50, 180, 50), 9)
-addLogLabel("• Przebudowano system Anti-Fall:", Enum.Font.GothamBold, 11, Color3.fromRGB(255, 215, 0), 10)
-addLogLabel("  Skrypt automatycznie wyłącza lewitację i wraca do", Enum.Font.Gotham, 11, Color3.fromRGB(200, 200, 200), 11)
-addLogLabel("  pełnej normalności gry, gdy tylko staniesz na parcie!", Enum.Font.Gotham, 11, Color3.fromRGB(200, 200, 200), 12)
+-- Patches and fixes
+addLogLabel(" LATEST FIXES (v1.5.1)", Enum.Font.GothamBold, 13, Color3.fromRGB(50, 180, 50), 9)
+addLogLabel("• Fixed Slider Bug:", Enum.Font.GothamBold, 11, Color3.fromRGB(255, 215, 0), 10)
+addLogLabel("  Fixed incorrect parent assignment that broke Speed and Jump Sliders.", Enum.Font.Gotham, 11, Color3.fromRGB(200, 200, 200), 11)
+addLogLabel("• Rebuilt Anti-Fall system:", Enum.Font.GothamBold, 11, Color3.fromRGB(255, 215, 0), 12)
+addLogLabel("  The script automatically disables freefall state and returns", Enum.Font.Gotham, 11, Color3.fromRGB(200, 200, 200), 13)
+addLogLabel("  to full normalcy as soon as you touch a part/ground!", Enum.Font.Gotham, 11, Color3.fromRGB(200, 200, 200), 14)
 
 
 -- ====================================================================
--- KOD ZAKŁADKI: GŁÓWNE
+-- TAB CODE: MAIN
 -- ====================================================================
 local versionTextLabel = Instance.new("TextLabel")
 versionTextLabel.Size = UDim2.new(0.95, 0, 0, 18)
 versionTextLabel.BackgroundTransparency = 1
-versionTextLabel.Text = "Status: Skrypt Aktywny"
+versionTextLabel.Text = "Status: Script Active"
 versionTextLabel.TextColor3 = Color3.fromRGB(150, 150, 160)
 versionTextLabel.TextSize = 11
 versionTextLabel.Font = Enum.Font.GothamSemibold
@@ -261,7 +263,7 @@ versionTextLabel.Parent = pageMain
 local cycleTextLabel = Instance.new("TextLabel")
 cycleTextLabel.Size = UDim2.new(0.95, 0, 0, 25)
 cycleTextLabel.BackgroundTransparency = 1
-cycleTextLabel.Text = "Cycles End : Szukanie..."
+cycleTextLabel.Text = "Cycles End: Searching..."
 cycleTextLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
 cycleTextLabel.TextSize = 13
 cycleTextLabel.Font = Enum.Font.GothamBold
@@ -313,7 +315,7 @@ nickContainer.Parent = pageMain
 local nickTextBox = Instance.new("TextBox")
 nickTextBox.Size = UDim2.new(0.6, -4, 1, 0)
 nickTextBox.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
-nickTextBox.Text = "Nowy Nick"
+nickTextBox.Text = "New Nickname"
 nickTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 nickTextBox.Font = Enum.Font.GothamBold
 nickTextBox.TextSize = 12
@@ -365,19 +367,19 @@ nickBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Pętla Cykli
+-- Cycle System Loop
 task.spawn(function()
 	task.wait(0.5)
 	local targetTextBox = findCorrectTextBox()
 	if targetTextBox then
-		local function refreshText() cycleTextLabel.Text = "Cycles End : " .. targetTextBox.Text end
+		local function refreshText() cycleTextLabel.Text = "Cycles End: " .. targetTextBox.Text end
 		refreshText() targetTextBox:GetPropertyChangedSignal("Text"):Connect(refreshText)
 	else
-		cycleTextLabel.Text = "Cycles End : Błąd odczytu"
+		cycleTextLabel.Text = "Cycles End: Read Error"
 	end
 end)
 
--- Suwaki (Speed / Jump Power)
+-- Sliders (Speed / Jump Power)
 local customSpeed = 16
 local customJumpPower = 40
 
@@ -422,7 +424,7 @@ local function createSlider(name, min, max, default, layoutOrder, parentPage, ca
 	barBackground.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 	barBackground.BorderSizePixel = 0
 	barBackground.ZIndex = 14
-	barBackground.Parent = sliderFrame
+	barBackground.Parent = sliderFrame -- NAPRAWIONE: Przypisanie prawidłowego rodzica
 	Instance.new("UICorner", barBackground).CornerRadius = UDim.new(0, 3)
 
 	local barFill = Instance.new("Frame")
@@ -465,7 +467,7 @@ createSlider("Jump Power", 40, 150, 40, 6, pageMain, function(v) customJumpPower
 
 
 -- ====================================================================
--- KOD ZAKŁADKA: WIZUALNE
+-- TAB CODE: VISUALS
 -- ====================================================================
 local espEnabled = false
 local espConnections = {}
@@ -486,14 +488,14 @@ local function checkAndHighlight(object)
 	end
 end
 
-createMenuButton("ESPBtn", "Esp: OFF", 1, pageVisuals, function(btn)
+createMenuButton("ESPBtn", "ESP: OFF", 1, pageVisuals, function(btn)
 	espEnabled = not espEnabled
 	if espEnabled then
-		btn.Text = "Esp: ON" btn.BackgroundColor3 = Color3.fromRGB(50, 180, 50)
+		btn.Text = "ESP: ON" btn.BackgroundColor3 = Color3.fromRGB(50, 180, 50)
 		for _, obj in ipairs(Workspace:GetDescendants()) do checkAndHighlight(obj) end
 		table.insert(espConnections, Workspace.DescendantAdded:Connect(checkAndHighlight))
 	else
-		btn.Text = "Esp: OFF" btn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+		btn.Text = "ESP: OFF" btn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 		for _, c in ipairs(espConnections) do c:Disconnect() end espConnections = {}
 		for _, obj in ipairs(Workspace:GetDescendants()) do local h = obj:FindFirstChild("MenuESP") if h then h:Destroy() end end
 	end
@@ -531,9 +533,9 @@ end)
 
 
 -- ====================================================================
--- KOD ZAKŁADKA: INNE
+-- TAB CODE: OTHER
 -- ====================================================================
-createMenuButton("AdminBtn", "Inf Admin", 1, pageOther, function()
+createMenuButton("AdminBtn", "Infinite Admin", 1, pageOther, function()
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 end).BackgroundColor3 = Color3.fromRGB(65, 65, 70)
 
@@ -603,7 +605,7 @@ end)
 
 
 -- ====================================================================
--- FUNKCYJNE UI (Close / Minimize / Drag)
+-- FUNCTIONAL UI (Close / Minimize / Drag)
 -- ====================================================================
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
