@@ -59,7 +59,7 @@ titleLabel.Name = "Title"
 titleLabel.Size = UDim2.new(1, -90, 1, 0)
 titleLabel.Position = UDim2.new(0, 15, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "3008 Mod Menu v1.5.1"
+titleLabel.Text = "3008 Mod Menu v1.6.0"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 16
 titleLabel.Font = Enum.Font.GothamBold
@@ -167,26 +167,81 @@ tabs["Main"].BackgroundColor3 = activeTabColor
 tabs["Main"].TextColor3 = Color3.fromRGB(255, 255, 255)
 pages["Main"].Visible = true
 
+-- System wyświetlania opisu funkcji na dole strony
+local function showHelpText(parentPage, text)
+	local existingHelp = parentPage:FindFirstChild("HelpStatusLabel")
+	if not existingHelp then
+		existingHelp = Instance.new("TextLabel")
+		existingHelp.Name = "HelpStatusLabel"
+		existingHelp.Size = UDim2.new(0.95, 0, 0, 30)
+		existingHelp.BackgroundTransparency = 1
+		existingHelp.TextColor3 = Color3.fromRGB(0, 150, 255)
+		existingHelp.Font = Enum.Font.GothamSemibold
+		existingHelp.TextSize = 11
+		existingHelp.TextWrapped = true
+		existingHelp.TextXAlignment = Enum.TextXAlignment.Center
+		existingHelp.LayoutOrder = 999
+		existingHelp.ZIndex = 13
+		existingHelp.Parent = parentPage
+	end
+	existingHelp.Text = "Description: " .. text
+	task.spawn(function()
+		task.wait(4)
+		if existingHelp.Text == "Description: " .. text then
+			existingHelp.Text = ""
+		end
+	end)
+end
+
+-- Pomocnicza funkcja do tworzenia przycisku info [?] obok elementu
+local function attachHelpButton(container, helpText, parentPage)
+	local helpBtn = Instance.new("TextButton")
+	helpBtn.Name = "HelpBtn"
+	helpBtn.Size = UDim2.new(0, 26, 0, 26)
+	helpBtn.Position = UDim2.new(1, -30, 0.5, -13)
+	helpBtn.BackgroundColor3 = Color3.fromRGB(55, 55, 60)
+	helpBtn.Text = "?"
+	helpBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+	helpBtn.Font = Enum.Font.GothamBold
+	helpBtn.TextSize = 12
+	helpBtn.BorderSizePixel = 0
+	helpBtn.ZIndex = 15
+	helpBtn.Parent = container
+	Instance.new("UICorner", helpBtn).CornerRadius = UDim.new(0, 6)
+
+	helpBtn.MouseButton1Click:Connect(function()
+		showHelpText(parentPage, helpText)
+	end)
+end
+
 -- Helper function to create buttons
-local function createMenuButton(name, text, layoutOrder, parentPage, callback)
+local function createMenuButton(name, text, layoutOrder, parentPage, helpText, callback)
+	local container = Instance.new("Frame")
+	container.Name = name .. "Container"
+	container.Size = UDim2.new(0.95, 0, 0, 36)
+	container.BackgroundTransparency = 1
+	container.LayoutOrder = layoutOrder
+	container.ZIndex = 12
+	container.Parent = parentPage
+
 	local button = Instance.new("TextButton")
 	button.Name = name
-	button.Size = UDim2.new(0.95, 0, 0, 36)
+	button.Size = UDim2.new(1, -36, 1, 0)
 	button.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 	button.Text = text
 	button.TextColor3 = Color3.fromRGB(255, 255, 255)
 	button.Font = Enum.Font.GothamBold
 	button.TextSize = 13
 	button.BorderSizePixel = 0
-	button.LayoutOrder = layoutOrder
 	button.ZIndex = 13
-	button.Parent = parentPage
+	button.Parent = container
 
 	local bCorner = Instance.new("UICorner")
 	bCorner.CornerRadius = UDim.new(0, 6)
 	bCorner.Parent = button
 
 	button.MouseButton1Click:Connect(function() callback(button) end)
+	attachHelpButton(container, helpText, parentPage)
 	return button
 end
 
@@ -208,11 +263,11 @@ local function findCorrectTextBox()
 end
 
 -- ====================================================================
--- TAB CODE: WHAT'S NEW
+-- TAB CODE: WHAT'S NEW (Tylko najnowsza wersja, pogrubiona)
 -- ====================================================================
 local function addLogLabel(text, font, size, color, order)
 	local lbl = Instance.new("TextLabel")
-	lbl.Size = UDim2.new(0.95, 0, 0, 20)
+	lbl.Size = UDim2.new(0.95, 0, 0, 22)
 	lbl.BackgroundTransparency = 1
 	lbl.Text = text
 	lbl.TextColor3 = color
@@ -224,25 +279,11 @@ local function addLogLabel(text, font, size, color, order)
 	lbl.Parent = pageWhatsNew
 end
 
--- Version 1.1.0 Features
-addLogLabel(" VERSION 1.1.0 (Features)", Enum.Font.GothamBold, 14, Color3.fromRGB(0, 150, 255), 1)
-addLogLabel("• Added feature: Speed & Jump Power Sliders", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 2)
-addLogLabel("• Added feature: FullBright (Headlight)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 3)
-addLogLabel("• Added feature: Infinite Admin (Yield)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 4)
-addLogLabel("• Added feature: Trans Walk (Pass through transparent objects)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 5)
-addLogLabel("• Added feature: ESP (Highlight Players/NPCs)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 6)
-addLogLabel("• Added system: CloseButton (X) & MinimizeButton (-)", Enum.Font.GothamSemibold, 12, Color3.fromRGB(230, 230, 230), 7)
-
--- Spacing
-addLogLabel("", Enum.Font.Gotham, 10, Color3.fromRGB(255,255,255), 8)
-
--- Patches and fixes
-addLogLabel(" LATEST FIXES (v1.5.1)", Enum.Font.GothamBold, 13, Color3.fromRGB(50, 180, 50), 9)
-addLogLabel("• Fixed Slider Bug:", Enum.Font.GothamBold, 11, Color3.fromRGB(255, 215, 0), 10)
-addLogLabel("  Fixed incorrect parent assignment that broke Speed and Jump Sliders.", Enum.Font.Gotham, 11, Color3.fromRGB(200, 200, 200), 11)
-addLogLabel("• Rebuilt Anti-Fall system:", Enum.Font.GothamBold, 11, Color3.fromRGB(255, 215, 0), 12)
-addLogLabel("  The script automatically disables freefall state and returns", Enum.Font.Gotham, 11, Color3.fromRGB(200, 200, 200), 13)
-addLogLabel("  to full normalcy as soon as you touch a part/ground!", Enum.Font.Gotham, 11, Color3.fromRGB(200, 200, 200), 14)
+-- Tylko Najnowsza Wersja 1.6.0 (Pogrubiona / Bold)
+addLogLabel(" LATEST VERSION 1.6.0", Enum.Font.GothamBold, 15, Color3.fromRGB(0, 150, 255), 1)
+addLogLabel("• Added feature description buttons [?] next to features.", Enum.Font.GothamBold, 12, Color3.fromRGB(255, 255, 255), 2)
+addLogLabel("• Cleaned up the 'What's new' tab to show only latest logs.", Enum.Font.GothamBold, 12, Color3.fromRGB(255, 255, 255), 3)
+addLogLabel("• Fixed Slider script crash bugs & fully translated UI.", Enum.Font.GothamBold, 12, Color3.fromRGB(255, 255, 255), 4)
 
 
 -- ====================================================================
@@ -281,7 +322,7 @@ local function formatSecondsToTime(textSeconds)
 	return string.format("%d:%02d", math.floor(totalSeconds / 60), totalSeconds % 60)
 end
 
-createMenuButton("WatchBtn", "Fake Watch: OFF", 3, pageMain, function(btn)
+createMenuButton("WatchBtn", "Fake Watch: OFF", 3, pageMain, "Shows game progression clock on your topbar without owning the gamepass.", function(btn)
 	watchEnabled = not watchEnabled
 	local gamepassClock = nil
 	pcall(function() gamepassClock = playerGui.MainGui.TopBar.Calendar.Gamepass_Clock end)
@@ -313,7 +354,7 @@ nickContainer.ZIndex = 13
 nickContainer.Parent = pageMain
 
 local nickTextBox = Instance.new("TextBox")
-nickTextBox.Size = UDim2.new(0.6, -4, 1, 0)
+nickTextBox.Size = UDim2.new(0.5, -4, 1, 0)
 nickTextBox.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
 nickTextBox.Text = "New Nickname"
 nickTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -325,8 +366,8 @@ nickTextBox.Parent = nickContainer
 Instance.new("UICorner", nickTextBox).CornerRadius = UDim.new(0, 6)
 
 local nickBtn = Instance.new("TextButton")
-nickBtn.Size = UDim2.new(0.4, -4, 1, 0)
-nickBtn.Position = UDim2.new(0.6, 4, 0, 0)
+nickBtn.Size = UDim2.new(0.35, -4, 1, 0)
+nickBtn.Position = UDim2.new(0.5, 2, 0, 0)
 nickBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 nickBtn.Text = "Nick: OFF"
 nickBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -336,6 +377,8 @@ nickBtn.BorderSizePixel = 0
 nickBtn.ZIndex = 14
 nickBtn.Parent = nickContainer
 Instance.new("UICorner", nickBtn).CornerRadius = UDim.new(0, 6)
+
+attachHelpButton(nickContainer, "Changes your topbar visual username locally to any custom string.", pageMain)
 
 local nickEnabled = false
 local nickConnection = nil
@@ -396,14 +439,21 @@ local statsConnection = RunService.Heartbeat:Connect(function()
 	end
 end)
 
-local function createSlider(name, min, max, default, layoutOrder, parentPage, callback)
+local function createSlider(name, min, max, default, layoutOrder, parentPage, helpText, callback)
+	local container = Instance.new("Frame")
+	container.Name = name .. "SliderContainer"
+	container.Size = UDim2.new(0.95, 0, 0, 45)
+	container.BackgroundTransparency = 1
+	container.LayoutOrder = layoutOrder
+	container.ZIndex = 12
+	container.Parent = parentPage
+
 	local sliderFrame = Instance.new("Frame")
-	sliderFrame.Size = UDim2.new(0.95, 0, 0, 45)
+	sliderFrame.Size = UDim2.new(1, -36, 1, 0)
 	sliderFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
 	sliderFrame.BorderSizePixel = 0
-	sliderFrame.LayoutOrder = layoutOrder
 	sliderFrame.ZIndex = 13
-	sliderFrame.Parent = parentPage
+	sliderFrame.Parent = container
 	Instance.new("UICorner", sliderFrame).CornerRadius = UDim.new(0, 5)
 
 	local label = Instance.new("TextLabel")
@@ -424,7 +474,7 @@ local function createSlider(name, min, max, default, layoutOrder, parentPage, ca
 	barBackground.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 	barBackground.BorderSizePixel = 0
 	barBackground.ZIndex = 14
-	barBackground.Parent = sliderFrame -- NAPRAWIONE: Przypisanie prawidłowego rodzica
+	barBackground.Parent = sliderFrame
 	Instance.new("UICorner", barBackground).CornerRadius = UDim.new(0, 3)
 
 	local barFill = Instance.new("Frame")
@@ -460,10 +510,12 @@ local function createSlider(name, min, max, default, layoutOrder, parentPage, ca
 	UserInputService.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then isSliding = false end
 	end)
+
+	attachHelpButton(container, helpText, parentPage)
 end
 
-createSlider("Speed", 16, 120, 16, 5, pageMain, function(v) customSpeed = v end)
-createSlider("Jump Power", 40, 150, 40, 6, pageMain, function(v) customJumpPower = v end)
+createSlider("Speed", 16, 120, 16, 5, pageMain, "Modifies your local character walking movement speed value.", function(v) customSpeed = v end)
+createSlider("Jump Power", 40, 150, 40, 6, pageMain, "Modifies your character upward jump velocity force value.", function(v) customJumpPower = v end)
 
 
 -- ====================================================================
@@ -488,7 +540,7 @@ local function checkAndHighlight(object)
 	end
 end
 
-createMenuButton("ESPBtn", "ESP: OFF", 1, pageVisuals, function(btn)
+createMenuButton("ESPBtn", "ESP: OFF", 1, pageVisuals, "Highlights all real players (blue) and enemy NPCs (red) through solid walls.", function(btn)
 	espEnabled = not espEnabled
 	if espEnabled then
 		btn.Text = "ESP: ON" btn.BackgroundColor3 = Color3.fromRGB(50, 180, 50)
@@ -518,7 +570,7 @@ local function addHeadlight()
 	end)
 end
 
-createMenuButton("FullBrightBtn", "FullBright: OFF", 2, pageVisuals, function(btn)
+createMenuButton("FullBrightBtn", "FullBright: OFF", 2, pageVisuals, "Attaches a powerful spotlight to your head to completely illuminate dark areas during night cycles.", function(btn)
 	fbEnabled = not fbEnabled
 	if fbEnabled then
 		btn.Text = "FullBright: ON" btn.BackgroundColor3 = Color3.fromRGB(50, 180, 50)
@@ -535,7 +587,7 @@ end)
 -- ====================================================================
 -- TAB CODE: OTHER
 -- ====================================================================
-createMenuButton("AdminBtn", "Infinite Admin", 1, pageOther, function()
+createMenuButton("AdminBtn", "Infinite Admin", 1, pageOther, "Loads the full EdgeIY Infinite Yield administrator command script tool chest.", function()
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 end).BackgroundColor3 = Color3.fromRGB(65, 65, 70)
 
@@ -553,7 +605,7 @@ local function processPart(part)
 	end
 end
 
-createMenuButton("TransWalkBtn", "Trans Walk: OFF", 2, pageOther, function(btn)
+createMenuButton("TransWalkBtn", "Trans Walk: OFF", 2, pageOther, "Forces transparent baseparts to retain solid collision parameters across workspace.", function(btn)
 	transWalkEnabled = not transWalkEnabled
 	if transWalkEnabled then
 		btn.Text = "Trans Walk: ON" btn.BackgroundColor3 = Color3.fromRGB(50, 180, 50)
@@ -572,7 +624,7 @@ local antiFallEnabled = false
 local antiFallConnection = nil
 local isHoldingAntiFall = false
 
-createMenuButton("AntiFallBtn", "Anti-Fall: OFF", 3, pageOther, function(btn)
+createMenuButton("AntiFallBtn", "Anti-Fall: OFF", 3, pageOther, "Prevents dying from falling into the void by freezing freefall state instantly.", function(btn)
 	antiFallEnabled = not antiFallEnabled
 	if antiFallEnabled then
 		btn.Text = "Anti-Fall: ON" btn.BackgroundColor3 = Color3.fromRGB(50, 180, 50)
