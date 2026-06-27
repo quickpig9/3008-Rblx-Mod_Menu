@@ -8,6 +8,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/quickpig9/3008-Rblx-M
 Image Menu
 <img src="https://raw.githubusercontent.com/quickpig9/3008-Rblx-Mod_Menu/refs/heads/main/Images/IMAGE1.jpg"/>
 
-After 3 days, I upload to https://scriptblox.com/ 👍
+After 1 days, I upload to https://scriptblox.com/ 👍
 
 :3
